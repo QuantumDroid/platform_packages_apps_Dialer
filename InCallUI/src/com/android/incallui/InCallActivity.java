@@ -309,8 +309,8 @@ public class InCallActivity extends TransactionSafeActivity implements FragmentD
         InCallPresenter.getInstance().setThemeColors();
         InCallPresenter.getInstance().onUiShowing(true);
 
-        // Clear fullscreen state onResume; the stored value may not match reality.
-        InCallPresenter.getInstance().clearFullscreen();
+        // Exit fullscreen state onResume; the stored value may not match reality.
+        InCallPresenter.getInstance().setFullScreen(false);
 
         // If there is a pending request to show or hide the dialpad, handle that now.
         if (mShowDialpadRequest != DIALPAD_REQUEST_NONE) {
@@ -340,6 +340,13 @@ public class InCallActivity extends TransactionSafeActivity implements FragmentD
             showPostCharWaitDialog(mShowPostCharWaitDialogCallId, mShowPostCharWaitDialogChars);
         }
         InCallPresenter.getInstance().updatePrimaryCallState();
+    }
+
+    @Override
+    public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
+        super.onMultiWindowModeChanged(isInMultiWindowMode);
+        Log.i(this, "recreate()...");
+        recreate();
     }
 
     // onPause is guaranteed to be called when the InCallActivity goes
